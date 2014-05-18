@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animation-list android:oneshot="false"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:duration="@integer/peak" android:drawable="@drawable/droidman01" />
+    <item android:duration="@integer/peak" android:drawable="@drawable/droidman02" />
+    <item android:duration="@integer/peak" android:drawable="@drawable/droidman03" />
+    <item android:duration="@integer/peak" android:drawable="@drawable/droidman04" />
+    <item android:duration="@integer/peak" android:drawable="@drawable/droidman05" />
+    <item android:duration="@integer/peak" android:drawable="@drawable/droidman06" />
+    <item android:duration="@integer/peak" android:drawable="@drawable/droidman07" />
+    <item android:duration="@integer/peak" android:drawable="@drawable/droidman08" />
+    <item android:duration="@integer/peak" android:drawable="@drawable/droidman09" />
+    <item android:duration="@integer/peak" android:drawable="@drawable/droidman10" />
+    <item android:duration="@integer/peak" android:drawable="@drawable/droidman11" />
+    <item android:duration="@integer/peak" android:drawable="@drawable/droidman12" />
+    <item android:duration="@integer/peak" android:drawable="@drawable/droidman13" />
+    <item android:duration="@integer/peak" android:drawable="@drawable/droidman14" />
+    <item android:duration="@integer/peak" android:drawable="@drawable/droidman15" />
+    <item android:duration="@integer/peak" android:drawable="@drawable/droidman16" />
+</animation-list>
