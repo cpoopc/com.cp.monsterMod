@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <style name="mytouming" parent="ApolloTheme">
+        <item name="android:windowActionBarOverlay">true</item>
+    </style>
     <style name="ApolloTheme" parent="@android:style/Theme.Holo.Light">
         <item name="android:actionBarStyle">@style/ApolloTheme.GreenActionBar</item>
     	<item name="android:actionOverflowButtonStyle">@style/ApolloTheme.OverFlow</item>

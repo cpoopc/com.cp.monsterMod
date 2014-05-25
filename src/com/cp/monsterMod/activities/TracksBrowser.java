@@ -9,6 +9,8 @@ import android.content.*;
 import android.content.pm.ActivityInfo;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -22,6 +24,7 @@ import android.provider.MediaStore.Audio.Playlists;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.SimpleOnPageChangeListener;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.MenuItem;
 import android.view.View;
@@ -93,9 +96,23 @@ public class TracksBrowser extends FragmentActivity implements ServiceConnection
 
         // Layout
         setContentView(R.layout.track_browser);
-        registerForContextMenu(findViewById(R.id.half_artist_image));
+//        registerForContextMenu(findViewById(R.id.half_artist_image));
 
-        mBActionbar =(BottomActionBarFragment) getSupportFragmentManager().findFragmentById(R.id.bottomactionbar_new);
+        initBottonPanel();
+        //ImageCache
+    	mImageProvider = ImageProvider.getInstance( this );
+        // Important!
+        whatBundle(icicle);
+        // Update the ActionBar
+        initActionBar();
+        // Important!
+        //可拖拽listview在这里面
+        initPager();
+    }
+
+
+	private void initBottonPanel() {
+		mBActionbar =(BottomActionBarFragment) getSupportFragmentManager().findFragmentById(R.id.bottomactionbar_new);
         mBActionbar.setUpQueueSwitch(this);
         
         mPanel = (SlidingUpPanelLayout) findViewById(R.id.sliding_layout);
@@ -125,19 +142,7 @@ public class TracksBrowser extends FragmentActivity implements ServiceConnection
             @Override
             public void onPanelAnchored(View panel) {}
         });
-        //ImageCache
-    	mImageProvider = ImageProvider.getInstance( this );
-        // Important!
-        whatBundle(icicle);
-        // Update the colorstrip color
-        initColorstrip();
-        // Update the ActionBar
-        initActionBar();
-        // Update the half_and_half layout
-        initUpperHalf();
-        // Important!
-        initPager();
-    }
+	}
     
 
     @Override
@@ -342,92 +347,33 @@ public class TracksBrowser extends FragmentActivity implements ServiceConnection
     }
 
     /**
-     * For the theme chooser
-     */
-    private void initColorstrip() {
-
-        RelativeLayout mColorstrip2 = (RelativeLayout)findViewById(R.id.bottom_colorstrip);
-        mColorstrip2.setBackgroundColor(getResources().getColor(R.color.holo_blue_dark));
-    }
-
-    /**
      * Set the ActionBar title
      */
     private void initActionBar() {
+    	getActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#330000ff")));
         ApolloUtils.showUpTitleOnly(getActionBar());
+//        getActionBar().setDisplayUseLogoEnabled(true);
     }
 
-    private void onToggleButton(){
-    	if(mViewPager!=null){
-    		int cur = mViewPager.getCurrentItem();
-    		if(cur == 0){
-    			mChangeButton.setImageResource(R.drawable.view_more_song);
-    			mViewPager.setCurrentItem(1);
-    			TextView lineTwoView = (TextView)findViewById(R.id.half_artist_image_text_line_two);
-    	        String lineTwo = MusicUtils.makeAlbumsLabel(this, 0, Integer.parseInt(getNumSongs()), true);
-    			lineTwoView.setText(lineTwo);
-    		}else{
-    			mChangeButton.setImageResource(R.drawable.view_more_album);
-    			mViewPager.setCurrentItem(0);
-    			TextView lineTwoView = (TextView)findViewById(R.id.half_artist_image_text_line_two);
-    			String lineTwo = MusicUtils.makeAlbumsLabel(this, Integer.parseInt(getNumAlbums()), 0, false);
-    	        lineTwoView.setText(lineTwo);
-    		}
-    	}    	
-    }
+//    private void onToggleButton(){
+//    	if(mViewPager!=null){
+//    		int cur = mViewPager.getCurrentItem();
+//    		if(cur == 0){
+//    			mChangeButton.setImageResource(R.drawable.view_more_song);
+//    			mViewPager.setCurrentItem(1);
+//    			TextView lineTwoView = (TextView)findViewById(R.id.half_artist_image_text_line_two);
+//    	        String lineTwo = MusicUtils.makeAlbumsLabel(this, 0, Integer.parseInt(getNumSongs()), true);
+//    			lineTwoView.setText(lineTwo);
+//    		}else{
+//    			mChangeButton.setImageResource(R.drawable.view_more_album);
+//    			mViewPager.setCurrentItem(0);
+//    			TextView lineTwoView = (TextView)findViewById(R.id.half_artist_image_text_line_two);
+//    			String lineTwo = MusicUtils.makeAlbumsLabel(this, Integer.parseInt(getNumAlbums()), 0, false);
+//    	        lineTwoView.setText(lineTwo);
+//    		}
+//    	}    	
+//    }
     
-    /**
-     * Sets up the @half_and_half.xml layout
-     */
-    private void initUpperHalf() {
-    	ImageInfo mInfo = new ImageInfo();
-    	mInfo.source = SRC_FIRST_AVAILABLE;
-        mInfo.size = SIZE_NORMAL;
-    	final ImageView imageView = (ImageView)findViewById(R.id.half_artist_image);
-    	String lineOne = "";
-    	String lineTwo = "";
-
-        if (ApolloUtils.isArtist(mimeType)) {
-        	mChangeButton = (ImageButton)findViewById(R.id.view_more);
-        	mChangeButton.setVisibility(View.VISIBLE);
-        	mChangeButton.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                	onToggleButton();
-                }
-            });
-        	String mArtist = getArtist();
-            mInfo.type = TYPE_ARTIST;
-            mInfo.data = new String[]{ mArtist };  
-            lineOne = mArtist;
-            lineTwo = MusicUtils.makeAlbumsLabel(this, Integer.parseInt(getNumAlbums()), 0, false);
-        }else if (ApolloUtils.isAlbum(mimeType)) {
-        	String mAlbum = getAlbum(), mArtist = getArtist();
-            mInfo.type = TYPE_ALBUM;
-            mInfo.data = new String[]{ getAlbumId(), mAlbum, mArtist };                
-            lineOne = mAlbum;
-            lineTwo = mArtist;
-        } else if (Audio.Playlists.CONTENT_TYPE.equals(mimeType)) {
-        	String plyName = bundle.getString(PLAYLIST_NAME);
-        	mInfo.type = TYPE_PLAYLIST;
-            mInfo.data = new String[]{ plyName };               
-            lineOne = plyName;
-        }
-        else{ 
-        	String genName = MusicUtils.parseGenreName(this,
-        			MusicUtils.getGenreName(this, bundle.getLong(BaseColumns._ID), true));
-        	mInfo.type = TYPE_GENRE;
-            mInfo.size = SIZE_NORMAL;
-            mInfo.data = new String[]{ genName };             
-            lineOne = genName;
-        }
-
-        mImageProvider.loadImage( imageView, mInfo );        
-        TextView lineOneView = (TextView)findViewById(R.id.half_artist_image_text);
-        lineOneView.setText(lineOne);
-        TextView lineTwoView = (TextView)findViewById(R.id.half_artist_image_text_line_two);
-        lineTwoView.setText(lineTwo);
-    }
 
     /**
      * Initiate ViewPager and PagerAdapter
@@ -436,9 +382,9 @@ public class TracksBrowser extends FragmentActivity implements ServiceConnection
         // Initiate PagerAdapter
         PagerAdapter mPagerAdapter = new PagerAdapter(getSupportFragmentManager());
         if (ApolloUtils.isArtist(mimeType))
-            // Show all albums for an artist
+            // Show all albums for an artist艺术家
             mPagerAdapter.addFragment(new ArtistAlbumsFragment(bundle));
-        // Show the tracks for an artist or album
+        // Show the tracks for an artist or album专辑
         if(Playlists.CONTENT_TYPE.equals(mimeType)){
             mPagerAdapter.addFragment(new PlaylistListFragment(bundle));
         }
@@ -464,17 +410,8 @@ public class TracksBrowser extends FragmentActivity implements ServiceConnection
     private class PageListener extends SimpleOnPageChangeListener{
         public void onPageSelected(int cur) {            
         	if(cur == 0){
-    			ImageButton mCButton = (ImageButton)findViewById(R.id.view_more);
-    			mCButton.setImageResource(R.drawable.view_more_album);
-    			TextView lineTwoView = (TextView)findViewById(R.id.half_artist_image_text_line_two);
-    			String lineTwo = MusicUtils.makeAlbumsLabel(TracksBrowser.this, Integer.parseInt(getNumAlbums()), 0, false);
-    	        lineTwoView.setText(lineTwo);
     		}else{
-            	ImageButton mCButton = (ImageButton)findViewById(R.id.view_more);
-    			mCButton.setImageResource(R.drawable.view_more_song);
-    			TextView lineTwoView = (TextView)findViewById(R.id.half_artist_image_text_line_two);
-    	        String lineTwo = MusicUtils.makeAlbumsLabel(TracksBrowser.this, 0, Integer.parseInt(getNumSongs()), true);
-    			lineTwoView.setText(lineTwo);
+    			//CP 
     		}
 	    }
 	}

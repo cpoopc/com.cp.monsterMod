@@ -4,14 +4,17 @@ package com.cp.monsterMod.ui.fragments.list;
 import static com.cp.monsterMod.Constants.TYPE_ARTIST;
 import com.cp.monsterMod.R;
 import com.cp.monsterMod.ui.adapters.list.ArtistListAdapter;
+import com.cp.monsterMod.ui.fragments.base.CpListViewFragment;
 import com.cp.monsterMod.ui.fragments.base.ListViewFragment;
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.provider.BaseColumns;
 import android.provider.MediaStore.Audio;
 import android.provider.MediaStore.MediaColumns;
 import android.provider.MediaStore.Audio.AudioColumns;
 
-public class ArtistListFragment extends ListViewFragment {
+@SuppressLint("ValidFragment")
+public class ArtistListFragment extends CpListViewFragment {
 	
     public ArtistListFragment(Bundle args) {
         setArguments(args);

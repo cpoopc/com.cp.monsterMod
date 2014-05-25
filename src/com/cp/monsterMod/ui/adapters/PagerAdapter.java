@@ -39,7 +39,9 @@ public class PagerAdapter extends FragmentPagerAdapter {
     }
 
     /**
+     * 刷新继承自可刷新fragment的子类
      * This method update the fragments that extends the {@link RefreshableFragment} class
+     * 
      */
     public void refresh() {
         for (int i = 0; i < mFragments.size(); i++) {

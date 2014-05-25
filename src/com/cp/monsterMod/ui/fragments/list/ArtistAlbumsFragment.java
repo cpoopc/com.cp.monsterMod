@@ -13,13 +13,14 @@ import com.cp.monsterMod.R;
 import com.cp.monsterMod.helpers.utils.ApolloUtils;
 import com.cp.monsterMod.helpers.utils.MusicUtils;
 import com.cp.monsterMod.ui.adapters.list.ArtistAlbumAdapter;
+import com.cp.monsterMod.ui.fragments.base.CpListViewFragment;
 import com.cp.monsterMod.ui.fragments.base.ListViewFragment;
 import static com.cp.monsterMod.Constants.TYPE_ALBUM;
 import static com.cp.monsterMod.Constants.EXTERNAL;
 import static com.cp.monsterMod.Constants.INTENT_ADD_TO_PLAYLIST;
 import static com.cp.monsterMod.Constants.INTENT_PLAYLIST_LIST;
 
-public class ArtistAlbumsFragment extends ListViewFragment{
+public class ArtistAlbumsFragment extends CpListViewFragment{
 
     public ArtistAlbumsFragment(Bundle args) {
         setArguments(args);

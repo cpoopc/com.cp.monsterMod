@@ -333,7 +333,7 @@ public class ApolloUtils {
 //        mToast.show();
     	ToastUtils.showToast(context, context.getString(message));
     }
-    
+    //启动播放列表界面:艺术家,专辑,流派,播放列表详情界面
     public static void startTracksBrowser(String Type, long id, Cursor mCursor, Context context ) {
     	Bundle bundle = new Bundle();
         if( Type == TYPE_ARTIST ){

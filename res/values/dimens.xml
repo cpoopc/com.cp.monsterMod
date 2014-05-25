@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
+	<!-- 	noboringactionbar -->
+	<dimen name="header_height">250dp</dimen>
+    <dimen name="header_logo_size">100dp</dimen>
     <!-- Text sizes -->
     <dimen name="text_size_extra_micro">10sp</dimen>
     <dimen name="text_size_micro">12sp</dimen>

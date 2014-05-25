@@ -591,7 +591,7 @@ public class AudioPlayerFragment extends Fragment {
         mInfo.data = new String[]{ albumId , artistName, albumName };
 
         AlbumArtFragment cur =(AlbumArtFragment) mPagerAdapter.getItem(mAlbumArtPager.getCurrentItem());
-        ImageProvider.getInstance( getActivity() ).loadImage( cur.albumArt, mInfo );
+//        ImageProvider.getInstance( getActivity() ).loadImage( cur.albumArt, mInfo );
     }
 
 }

@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
+<!--     noboringactionbar -->
+	<color name="main">#63C3FF</color>
+    <color name="actionbar_title_color">@android:color/white</color>
     <!-- A transparent black -->
     <color name="transparent_black">#aa000000</color>
     

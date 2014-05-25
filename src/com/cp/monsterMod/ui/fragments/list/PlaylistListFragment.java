@@ -10,12 +10,17 @@ import android.provider.MediaStore.MediaColumns;
 import com.cp.monsterMod.R;
 import com.cp.monsterMod.helpers.utils.MusicUtils;
 import com.cp.monsterMod.ui.adapters.list.PlaylistListAdapter;
+import com.cp.monsterMod.ui.fragments.base.CpDragSortListViewFragment;
 import com.cp.monsterMod.ui.fragments.base.DragSortListViewFragment;
 import static com.cp.monsterMod.Constants.EXTERNAL;
 import static com.cp.monsterMod.Constants.PLAYLIST_FAVORITES;
 import static com.cp.monsterMod.Constants.TYPE_PLAYLIST;
-
-public class PlaylistListFragment extends DragSortListViewFragment{
+/**
+ * PlaylistsFragment-->viewpager-->PlaylistListFragment
+ * @author Administrator
+ *
+ */
+public class PlaylistListFragment extends CpDragSortListViewFragment{
     // Playlist ID
     private long mPlaylistId = -1;
     

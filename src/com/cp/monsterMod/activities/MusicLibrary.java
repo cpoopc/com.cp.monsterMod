@@ -244,25 +244,25 @@ public class MusicLibrary extends FragmentActivity implements ServiceConnection 
         // Recently added tracks
         if(tabs_set.contains(getResources().getString(R.string.tab_recent)))
         	mPagerAdapter.addFragment(new RecentlyAddedFragment());
-        // Artists
+        // Artists 艺术家
         if(tabs_set.contains(getResources().getString(R.string.tab_artists)))
         	mPagerAdapter.addFragment(new ArtistsFragment());
-        // Albums
+        // Albums 专辑
         if(tabs_set.contains(getResources().getString(R.string.tab_albums)))
         	mPagerAdapter.addFragment(new AlbumsFragment());
-        // // Tracks
+        // // Tracks 歌曲
         if(tabs_set.contains(getResources().getString(R.string.tab_songs)))
         	mPagerAdapter.addFragment(new SongsFragment());
-        // // Playlists
+        // // Playlists 播放列表
         if(tabs_set.contains(getResources().getString(R.string.tab_playlists)))
         	mPagerAdapter.addFragment(new PlaylistsFragment());
-        // // Genres
+        // // Genres 流派
         if(tabs_set.contains(getResources().getString(R.string.tab_genres)))
         	mPagerAdapter.addFragment(new GenresFragment());
         //在线音乐
         if(tabs_set.contains(getResources().getString(R.string.tab_online)))
         	mPagerAdapter.addFragment(new OnlineMusicFragment());
-
+//        	mPagerAdapter.refresh();
         // Initiate ViewPager
         ViewPager mViewPager = (ViewPager)findViewById(R.id.viewPager);
         mViewPager.setPageMargin(getResources().getInteger(R.integer.viewpager_margin_width));

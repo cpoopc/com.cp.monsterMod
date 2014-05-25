@@ -1,6 +1,7 @@
 package com.cp.monsterMod.ui.fragments.list;
 
 import static com.cp.monsterMod.Constants.TYPE_ALBUM;
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.provider.BaseColumns;
 import android.provider.MediaStore.Audio;
@@ -9,9 +10,11 @@ import android.provider.MediaStore.Audio.AudioColumns;
 
 import com.cp.monsterMod.R;
 import com.cp.monsterMod.ui.adapters.list.AlbumListAdapter;
+import com.cp.monsterMod.ui.fragments.base.CpListViewFragment;
 import com.cp.monsterMod.ui.fragments.base.ListViewFragment;
 
-public class AlbumListFragment extends ListViewFragment {
+@SuppressLint("ValidFragment")
+public class AlbumListFragment extends CpListViewFragment {
 
 	public AlbumListFragment(Bundle args) {    
 		setArguments(args);    

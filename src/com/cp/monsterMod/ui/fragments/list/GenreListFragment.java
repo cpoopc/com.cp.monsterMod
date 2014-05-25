@@ -1,6 +1,7 @@
 
 package com.cp.monsterMod.ui.fragments.list;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.provider.BaseColumns;
 import android.provider.MediaStore.Audio.AudioColumns;
@@ -8,11 +9,13 @@ import android.provider.MediaStore.Audio.Genres;
 import android.provider.MediaStore.MediaColumns;
 import com.cp.monsterMod.R;
 import com.cp.monsterMod.ui.adapters.list.GenreListAdapter;
+import com.cp.monsterMod.ui.fragments.base.CpListViewFragment;
 import com.cp.monsterMod.ui.fragments.base.ListViewFragment;
 import static com.cp.monsterMod.Constants.EXTERNAL;
 import static com.cp.monsterMod.Constants.TYPE_GENRE;
 
-public class GenreListFragment extends ListViewFragment{
+@SuppressLint("ValidFragment")
+public class GenreListFragment extends CpListViewFragment{
 	
     public GenreListFragment(Bundle args) {
         setArguments(args);
