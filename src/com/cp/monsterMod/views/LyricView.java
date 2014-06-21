@@ -2,6 +2,8 @@ package com.cp.monsterMod.views;
 
 import java.util.List;
 
+import com.cp.monsterMod.helpers.utils.DpPxUtil;
+
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -28,28 +30,29 @@ public int temp = 0;//CP ?
 private List<GeCiBean> list;//每首歌的歌词数据
 	public LyricView(Context context) {
 		super(context);
-		init();
+		init(context);
 	}
 	public LyricView(Context context,AttributeSet attr){
 		super(context,attr);
-		init();
+		init(context);
 	}
 	public LyricView(Context context,AttributeSet attr,int i){
 		super(context,attr,i);
-		init();
+		init(context);
 	}
-	private void init(){
+	private void init(Context context){
 		setFocusable(true);
 		//非高亮部分
 		mPaint = new Paint();
 		mPaint.setAntiAlias(true);
-		mPaint.setTextSize(18);
+		mPaint.setTextSize(DpPxUtil.dip2px(context, 14));
+//		mPaint.setTextSize(18);
 		mPaint.setColor(Color.WHITE);
 		mPaint.setTypeface(Typeface.SERIF);
 		//高亮部分 当前歌词
 		mPathPaint = new Paint();
 		mPathPaint.setAntiAlias(true);
-		mPathPaint.setTextSize(21);
+		mPathPaint.setTextSize(DpPxUtil.dip2px(context, 16));
 		mPathPaint.setColor(Color.GREEN);
 		mPathPaint.setTypeface(Typeface.SANS_SERIF);
 	}

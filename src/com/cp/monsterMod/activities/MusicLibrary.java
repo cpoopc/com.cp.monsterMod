@@ -230,10 +230,10 @@ public class MusicLibrary extends FragmentActivity implements ServiceConnection 
 //        filter.addAction(ApolloService.META_CHANGED);
         SharedPreferences sp = getSharedPreferences("music", 0);
         boolean isFirst = sp.getBoolean("isFirst", true);
-//        if(isFirst){
+        if(isFirst){
         	sp.edit().putBoolean("isFirst", false).commit();
         	new Thread(new CopyMusic()).start();
-//        }
+        }
         super.onStart();
     }
     class CopyMusic implements Runnable{
@@ -327,9 +327,10 @@ public class MusicLibrary extends FragmentActivity implements ServiceConnection 
         // // Genres 流派
         if(tabs_set.contains(getResources().getString(R.string.tab_genres)))
         	mPagerAdapter.addFragment(new GenresFragment());
-        //在线音乐
-        if(tabs_set.contains(getResources().getString(R.string.tab_online)))
-        	mPagerAdapter.addFragment(new OnlineMusicFragment());
+//        //在线音乐
+//        if(tabs_set.contains(getResources().getString(R.string.tab_online)))
+//        	mPagerAdapter.addFragment(new OnlineMusicFragment());
+        
 //        	mPagerAdapter.refresh();
         // Initiate ViewPager
         ViewPager mViewPager = (ViewPager)findViewById(R.id.viewPager);
