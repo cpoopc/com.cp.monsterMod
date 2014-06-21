@@ -13,7 +13,9 @@
     <color name="unselected_tabtext">#77000000</color>
 
     <!-- A semi-transparent dark Holo shade of blue -->
-    <color name="holo_blue_dark">#ff0099cc</color>
+<!-- cp:蓝色改为绿色     -->
+<!--     <color name="holo_blue_dark">#ff0099cc</color> -->
+    <color name="holo_blue_dark">#16BC5C</color>
     
     <color name="shuffle_grey">#ffdedede</color>
 
@@ -40,7 +42,7 @@
 <!-- 	绿色 -->
 	<color name="green">#BAF15A</color>
 	<drawable name="green">#16BC5C</drawable>
-<!-- 	绿色 -->
+<!-- 	黄色 -->
 	<color name="yellow">#F1DD5A</color>
 	<drawable name="yellow">#F1DD5A</drawable>
 </resources>

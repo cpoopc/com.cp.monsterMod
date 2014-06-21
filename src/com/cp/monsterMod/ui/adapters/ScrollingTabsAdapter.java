@@ -7,6 +7,7 @@ import java.util.Set;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -57,8 +58,9 @@ public class ScrollingTabsAdapter implements TabAdapter {
         	}        	
         }        
         //Set the tab text
-        if (position < tabs_new.length)
-            tab.setText(tabs_new[position].toUpperCase());
+        if (position < tabs_new.length){
+        	tab.setText(tabs_new[position].toUpperCase());
+        }
 
         return tab;
     }

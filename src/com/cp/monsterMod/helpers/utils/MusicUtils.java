@@ -1,6 +1,8 @@
 
 package com.cp.monsterMod.helpers.utils;
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Formatter;
 import java.util.HashMap;
@@ -11,12 +13,14 @@ import java.util.Random;
 
 import android.app.Activity;
 import android.app.SearchManager;
+import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
@@ -39,6 +43,8 @@ import android.provider.MediaStore.Audio.PlaylistsColumns;
 import android.provider.MediaStore.MediaColumns;
 import android.provider.Settings;
 import android.support.v4.app.FragmentActivity;
+import android.view.LayoutInflater;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
@@ -1368,5 +1374,62 @@ public class MusicUtils {
             cursor = null;
         }
 	}
-
+	/*
+	 * 获得手机里所有的歌词文件路径
+	 * CP
+	 */
+	static List<String> arra=new ArrayList<String>();
+	public static List<String> getAllLrc(String path){
+		File file=new File(path);
+		if(file.isDirectory()){
+			File[] files=file.listFiles();
+			if(files!=null&&files.length!=0){
+				for(File fi:files){
+					getAllLrc(fi.getAbsolutePath());
+				}
+			}
+			
+		}else{
+			if(file.getName().endsWith(".lrc")){
+				arra.add(path);
+			}
+		}
+		return arra;
+	}
+	public static String getlocal_lrc(String title,String artist,List<String> allLrclist){
+		String path="";
+		for (int i = 0; i < allLrclist.size(); i++) {
+			if (allLrclist.get(i).contains(title)&&allLrclist.get(i).contains(artist)) {
+				return allLrclist.get(i);
+			}
+		}
+		
+		return path;
+		
+	}
+//	class ScannerSdCardbroad extends BroadcastReceiver{
+//
+//		@Override
+//		public void onReceive(Context context, Intent intent) {
+//			// TODO Auto-generated method stub
+//			String action=intent.getAction();
+//			if(Intent.ACTION_MEDIA_SCANNER_STARTED.equals(action)){
+//				//收到开始扫描sd卡到媒体库的广播
+//				music_make_view.findViewById(R.id.shezhi_button1).setClickable(false);
+//				((Button)music_make_view.findViewById(R.id.shezhi_button1)).setText("亲，我在努力扫描sd卡呢……");
+//			}else if(Intent.ACTION_MEDIA_SCANNER_FINISHED.equals(action)){
+//				//收到完成扫描sd卡到媒体库的广播
+//				local_array=gm.getLocalMusicArray(MainActivity.this);//扫描后从新从媒体库加载音乐
+//				mdb.deceteAll();//清空数据库现有的数据
+//				mdb.setArray(local_array);//向数据库从新添加音乐
+//				LayoutInflater inf=getLayoutInflater();
+//				localAdapter=new ListViewAdapter(MainActivity.this, inf, local_array);
+//				local_listView.setAdapter(localAdapter);//适配界面
+//				music_make_view.findViewById(R.id.shezhi_button1).setClickable(true);
+//				Toast.makeText(getApplicationContext(), "亲，扫描sd卡加载完成", Toast.LENGTH_SHORT).show();
+//				((Button)music_make_view.findViewById(R.id.shezhi_button1)).setText("更新本地音乐");
+//			}
+//		}
+//		
+//	}
 }

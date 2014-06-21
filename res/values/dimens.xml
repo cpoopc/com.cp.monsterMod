@@ -21,7 +21,7 @@
     <dimen name="bottom_action_bar_item_width">46dp</dimen>
     <dimen name="bottom_action_bar_item_padding_left_right">1dp</dimen>
     <dimen name="bottom_action_bar_album_art_width_height">45dp</dimen>
-    <dimen name="bottom_action_bar_divider_height">2dp</dimen>
+    <dimen name="bottom_action_bar_divider_height">4dp</dimen>
     <dimen name="bottom_action_bar_info_padding_left">12dp</dimen>
 
     <!-- ViewPager margin stroke width -->

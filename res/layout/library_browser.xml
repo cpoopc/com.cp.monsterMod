@@ -53,6 +53,7 @@
             		android:layout_height="match_parent" /> 
             		
 			</LinearLayout>
+<!-- 			静态fragment -->
 			<fragment android:name="com.cp.monsterMod.ui.fragments.AudioPlayerFragment"
 	            android:id="@+id/audio_player_view"
 	            android:layout_weight="1"

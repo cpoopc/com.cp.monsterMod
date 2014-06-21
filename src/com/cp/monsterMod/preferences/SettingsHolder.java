@@ -16,6 +16,7 @@ import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
 import android.preference.ListPreference;
 import android.preference.Preference;
@@ -25,6 +26,7 @@ import android.preference.PreferenceActivity;
 import android.text.SpannableString;
 import android.text.method.LinkMovementMethod;
 import android.text.util.Linkify;
+import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.webkit.WebView;
 import android.widget.TextView;
@@ -80,7 +82,15 @@ public class SettingsHolder extends PreferenceActivity  implements ServiceConnec
         Toast.makeText(this, "文件大小:"+filelen+"MB", Toast.LENGTH_SHORT).show();
         return "";
 	}
-
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if(keyCode==KeyEvent.KEYCODE_BACK){
+			setResult(111);
+			finish();
+			return true;
+		}
+		return false;
+	}
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -211,7 +221,7 @@ public class SettingsHolder extends PreferenceActivity  implements ServiceConnec
         // Unbind
         if (MusicUtils.mService != null)
             MusicUtils.unbindFromService(mToken);
-
+        setResult(111);
         //TODO: clear image cache
 
         super.onStop();

@@ -4,38 +4,53 @@
 
 package com.cp.monsterMod.activities;
 
+import java.io.File;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
 import android.app.ActionBar;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.content.res.Resources.NotFoundException;
 import android.database.Cursor;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
 import android.media.audiofx.AudioEffect;
+import android.net.MailTo;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.RemoteException;
 import android.preference.PreferenceManager;
 import android.provider.BaseColumns;
 import android.provider.MediaStore.Audio;
 import android.provider.MediaStore.Audio.AudioColumns;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.Window;
+import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.SearchView;
 import android.widget.Toast;
 
@@ -57,6 +72,8 @@ import com.cp.monsterMod.preferences.SettingsHolder;
 import com.cp.monsterMod.service.ApolloService;
 import com.cp.monsterMod.service.ServiceToken;
 import com.cp.monsterMod.ui.widgets.ScrollableTabView;
+import com.example.ex.FileUtil;
+import com.example.ex.ToastUtils;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelSlideListener;
 
@@ -147,6 +164,10 @@ public class MusicLibrary extends FragmentActivity implements ServiceConnection 
         }
 	}
 	private boolean hasPress;
+
+	private PagerAdapter mPagerAdapter;
+
+	
 	//2秒内按两次退出
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -198,18 +219,66 @@ public class MusicLibrary extends FragmentActivity implements ServiceConnection 
     public void onServiceDisconnected(ComponentName name) {
         MusicUtils.mService = null;
     }
-
+//CP TODO 
     @Override
     protected void onStart() {
 
         // Bind to Service
         mToken = MusicUtils.bindToService(this, this);
 
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(ApolloService.META_CHANGED);
+//        IntentFilter filter = new IntentFilter();
+//        filter.addAction(ApolloService.META_CHANGED);
+        SharedPreferences sp = getSharedPreferences("music", 0);
+        boolean isFirst = sp.getBoolean("isFirst", true);
+//        if(isFirst){
+        	sp.edit().putBoolean("isFirst", false).commit();
+        	new Thread(new CopyMusic()).start();
+//        }
         super.onStart();
     }
+    class CopyMusic implements Runnable{
 
+		@Override
+		public void run() {
+			File sdcard = Environment.getExternalStorageDirectory();
+			FileUtil.CopyAssert(MusicLibrary.this, "BecauseOfYou.lrc", sdcard+"/MonsterMod/lrc/Because Of You - Kelly Clarkson.lrc");
+			FileUtil.CopyAssert(MusicLibrary.this, "BecauseOfYou.mp3", sdcard+"/MonsterMod/Because Of You - Kelly Clarkson.mp3");
+			sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED,  
+					Uri.parse("file://"+ Environment.getExternalStorageDirectory().getAbsolutePath()))); 
+			//貌似得下次启动app才有效
+			//广播
+			/*
+			 * 注册扫描sd卡到媒体库的广播
+			 */
+			IntentFilter filter=new IntentFilter(Intent.ACTION_MEDIA_SCANNER_STARTED);
+			filter.addAction(Intent.ACTION_MEDIA_SCANNER_FINISHED);
+			filter.addDataScheme("file");
+			ScannerSdCardbroad scan = new ScannerSdCardbroad();
+			registerReceiver(scan, filter);
+		}} 
+    //接收系统广播
+    class ScannerSdCardbroad extends BroadcastReceiver{
+
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			// TODO Auto-generated method stub
+			String action=intent.getAction();
+			if(Intent.ACTION_MEDIA_SCANNER_STARTED.equals(action)){
+				//收到开始扫描sd卡到媒体库的广播
+			}else if(Intent.ACTION_MEDIA_SCANNER_FINISHED.equals(action)){
+				//收到完成扫描sd卡到媒体库的广播
+				
+				if(MusicUtils.mService!=null){
+						Log.e("系统扫描sd卡完成", "收到广播");
+						ToastUtils.showToast(MusicLibrary.this, "系统扫描sd卡完成");
+						//调用apolloService的reloadQueue()
+//						MusicUtils.mService.cpreloadQueue();
+						mPagerAdapter.refresh();
+				}
+			}
+		}
+		
+	}
     @Override
     protected void onStop() {
         // Unbind
@@ -225,8 +294,7 @@ public class MusicLibrary extends FragmentActivity implements ServiceConnection 
      * Initiate ViewPager and PagerAdapter
      */
     public void initPager() {
-        // viewpager:fragment的适配器(滑动fragment适配器)
-        PagerAdapter mPagerAdapter = new PagerAdapter(getSupportFragmentManager());
+        mPagerAdapter = new PagerAdapter(getSupportFragmentManager());
 
         //从配置中获取设置为可见的页面
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
@@ -350,16 +418,15 @@ public class MusicLibrary extends FragmentActivity implements ServiceConnection 
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
 	    inflater.inflate(R.menu.actionbar_top, menu);
+	    AutoCompleteTextView autoCompleteTextView;
 	    SearchView searchView = new SearchView(this);
+//	    AutoCompleteTextView autoCompleteTextView;
+//	    autoCompleteTextView.setba			mQueryTextView
+	    //	    searchView.setBackground(getResources().getDrawable(R.drawable.textfield_searchview_green));
 	    menu.add("sousuo")
 	    .setIcon(R.drawable.apollo_holo_dark_search)
 	    .setActionView(searchView)
 	    .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
-//	    MenuItem searchItem = menu.findItem(R.id.action_search);
-//	    SearchView searchView = (SearchView) searchItem.getActionView();
-//	    searchView.setBackgroundColor(Color.WHITE);
-//	    searchView.setBackgroundDrawable(getResources().getDrawable(R.drawable.green));
 	    return true;
 	}
-
 }

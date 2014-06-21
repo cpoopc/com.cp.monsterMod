@@ -129,36 +129,30 @@
     <string name="play_external_error">无法播放文件</string>
     <!-- Settings -->
     <string name="about">关于</string>
-    <string name="eqalizer">Equalizer</string>
+    <string name="eqalizer">均衡器</string>
     <string name="header_interface">Interface</string>
     <string name="settings_storage_category">Storage</string>
-    <string name="themes">Themes</string>
-    <string name="apollo_themes">Select theme for Apollo</string>
-    <string name="select_theme">选择您的主题</string>
+    <string name="themes">主题</string>
+    <string name="apollo_themes">为播放器选择主题</string>
+    <string name="select_theme">选择主题</string>
     <string name="version">版本号</string>
-    <string name="tab_visibility_title">Tab visibility</string>
+    <string name="tab_visibility_title">选择显示分类标签</string>
     <string name="tab_visibility_summary">选择显示页面</string>
     <string name="settings_delete_cache_title">清空缓存</string>
-    <string name="settings_delete_cache_summary">Remove all cached images</string>
-    <string name="delete_warning">This will permanently delete the cached image entries</string>
-    <string name="visualizer_title">Audio visualizer</string>
-    <string name="visualizer_summary">Choose to display audio visualizations during playback</string>
-    <string name="widget_style_title">Widget Style</string>
-    <string name="widget_style_summary">Choose the widget design</string>
+    <string name="settings_delete_cache_summary">清空所有缓存图片</string>
+    <string name="delete_warning">此操作将删除所有缓存图片</string>
+    <string name="visualizer_title">音频可视化</string>
+    <string name="visualizer_summary">选择在播放时显示音频可视化效果</string>
+    <string name="widget_style_title">控件风格</string>
+    <string name="widget_style_summary">选择控件风格</string>
     <string name="widget_style_dark">Holo Dark</string>
     <string name="widget_style_light">Holo Light</string>
     <string name="about_apollomod_title">关于ApolloMod</string>
     <string name="about_apollomod_message">
-        <![CDATA[ApolloMod is an open source music player based on CyanogenMod\'s Apollo Music Player and released under the same Apache License.\n\n
-License Link:\n
-        http://www.apache.org/licenses/LICENSE-2.0.html \n\n
-ApolloMod Source Code:\n
-https://github.com/Splitter/android_packages_apps_apolloMod  \n\n
-Original Apollo Source Code: \n
-https://github.com/CyanogenMod/android_packages_apps_Apollo/tree/cm-10.1
-        
+        <![CDATA[MonsterMod是基于Apollo Music Player开发的一款音乐播放器.\n\n
+        	重新定义了播放器风格,修复了一些bug,并支持显示歌词和云播放等功能        
     ]]>
     </string>
-    <string name="dependencies">Dependency Licenses</string>
-    <string name="dependencies_title">Dependency Licenses:</string>
+    <string name="dependencies">依赖协议</string>
+    <string name="dependencies_title">依赖的协议:</string>
 </resources>

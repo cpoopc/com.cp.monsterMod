@@ -73,7 +73,7 @@ public abstract class ListViewAdapter extends SimpleCursorAdapter {
         final ViewHolderList viewholder;
         if ( view != null ) {
             viewholder = new ViewHolderList(view);
-            //TODO WeakReference是什么
+            //TODOWeakReference是什么 弱引用
             holderReference = new WeakReference<ViewHolderList>(viewholder);
             view.setTag(holderReference.get());
         } else {

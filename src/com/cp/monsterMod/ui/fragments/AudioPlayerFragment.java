@@ -17,6 +17,7 @@ import android.os.SystemClock;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.SimpleOnPageChangeListener;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -37,7 +38,11 @@ import com.cp.monsterMod.service.ApolloService;
 import com.cp.monsterMod.ui.adapters.AlbumArtPagerAdapter;
 import com.cp.monsterMod.ui.widgets.RepeatingImageButton;
 import com.cp.monsterMod.ui.widgets.VisualizerView;
-
+/**
+ * 音乐播放界面
+ * @author Administrator
+ *
+ */
 public class AudioPlayerFragment extends Fragment {
 
     // Total and current time
@@ -70,8 +75,26 @@ public class AudioPlayerFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        root = inflater.inflate(R.layout.audio_player, container, false);
+        initView(inflater, container);
         
+        mAlbumArtPager = (ViewPager)root.findViewById(R.id.now_playing_viewpager);
+        mPagerAdapter = new AlbumArtPagerAdapter(getChildFragmentManager());
+        mPagerAdapter.addFragment(new AlbumArtFragment());
+        mPagerAdapter.addFragment(new LyricFragment());
+//        mPagerAdapter.addFragment(new LyricFragment());
+        mAlbumArtPager.setAdapter(mPagerAdapter);
+        mAlbumArtPager.setOffscreenPageLimit(3);
+        mAlbumArtPager.setCurrentItem(1);
+        mAlbumArtPager.setOnPageChangeListener(new AlbumArtPageListener());
+        
+        FrameLayout mColorstripBottom = (FrameLayout)root.findViewById(R.id.colorstrip_bottom);
+        mColorstripBottom.setBackgroundColor(getResources().getColor(R.color.holo_blue_dark));
+        return root;
+    }
+
+	private void initView(LayoutInflater inflater, ViewGroup container) {
+		root = inflater.inflate(R.layout.audio_player, container, false);
+		mVisualizerView = (VisualizerView) root.findViewById(R.id.visualizerView);
         mTotalTime = (TextView)root.findViewById(R.id.audio_player_total_time);
         mCurrentTime = (TextView)root.findViewById(R.id.audio_player_current_time);
 
@@ -130,7 +153,7 @@ public class AudioPlayerFragment extends Fragment {
         });
         
         mShuffle.setOnClickListener(new OnClickListener() {
-            @Override
+            @Override 
             public void onClick(View v) {
                 toggleShuffle();
             }
@@ -142,53 +165,14 @@ public class AudioPlayerFragment extends Fragment {
             seeker.setOnSeekBarChangeListener(mSeekListener);
         }
         mProgress.setMax(1000);
-        
-        mAlbumArtPager = (ViewPager)root.findViewById(R.id.now_playing_viewpager);
-        mPagerAdapter = new AlbumArtPagerAdapter(getChildFragmentManager());
-        mPagerAdapter.addFragment(new AlbumArtFragment());
-        mPagerAdapter.addFragment(new AlbumArtFragment());
-        mPagerAdapter.addFragment(new AlbumArtFragment());
-        mAlbumArtPager.setAdapter(mPagerAdapter);
-        mAlbumArtPager.setOffscreenPageLimit(3);
-        mAlbumArtPager.setCurrentItem(1);
-        mAlbumArtPager.setOnPageChangeListener(new AlbumArtPageListener());
-        
-        FrameLayout mColorstripBottom = (FrameLayout)root.findViewById(R.id.colorstrip_bottom);
-        mColorstripBottom.setBackgroundColor(getResources().getColor(R.color.holo_blue_dark));
-        return root;
-    }
-
+	}
+/**
+ * 滑动过程中又动态添加fragment
+ * @author Administrator
+ *	CP
+ */
     private class AlbumArtPageListener extends SimpleOnPageChangeListener{
         public void onPageScrollStateChanged(int state) {   
-        	if(state == ViewPager.SCROLL_STATE_IDLE){
-        		int cur = mAlbumArtPager.getCurrentItem();
-	        	if(cur == 0){
-	        		mPagerAdapter.addFragmentTo(new AlbumArtFragment(), 0);
-	        		mPagerAdapter.removeItem(3);
-	                mAlbumArtPager.setAdapter(mPagerAdapter);
-	                mAlbumArtPager.setCurrentItem(1);
-	                if (MusicUtils.mService == null)
-	                    return;
-	                try {
-	                    MusicUtils.mService.prev();
-	                } catch (RemoteException ex) {
-	                    ex.printStackTrace();
-	                }
-	    		}
-	        	else if ( cur == 2 ){
-	        		mPagerAdapter.addFragmentTo(new AlbumArtFragment(), 3);
-	        		mPagerAdapter.removeItem(0);
-	                mAlbumArtPager.setAdapter(mPagerAdapter);
-	                mAlbumArtPager.setCurrentItem(1);
-	                if (MusicUtils.mService == null)
-	                    return;
-	                try {
-	                    MusicUtils.mService.next();
-	                } catch (RemoteException ex) {
-	                    ex.printStackTrace();
-	                }
-	    		}
-        	}
 	    }
 	}
     /**
@@ -204,20 +188,21 @@ public class AudioPlayerFragment extends Fragment {
             setRepeatButtonImage();
         }
     };
-
+    String TAG = "AudioPlayerFragment";
     @Override
     public void onStart() {
         super.onStart();
         IntentFilter f = new IntentFilter();
+        Log.e(TAG, "onstart");
         f.addAction(ApolloService.PLAYSTATE_CHANGED);
         f.addAction(ApolloService.META_CHANGED);
         getActivity().registerReceiver(mStatusListener, new IntentFilter(f));
 
         long next = refreshNow();
         queueNextRefresh(next);
-        
-        WeakReference<VisualizerView> mView = new WeakReference<VisualizerView>((VisualizerView)root.findViewById(R.id.visualizerView));
-        VisualizerUtils.updateVisualizerView(mView);
+        //CP 音频可视化
+//        WeakReference<VisualizerView> mView = new WeakReference<VisualizerView>((VisualizerView)root.findViewById(R.id.visualizerView));
+//        VisualizerUtils.updateVisualizerView(mView);
 
     }
 
@@ -497,6 +482,7 @@ public class AudioPlayerFragment extends Fragment {
 
     /**
      * Drag to a specfic duration
+     * CP 要同步歌词,就得把信息传递给LyricFragment;
      */
     private final OnSeekBarChangeListener mSeekListener = new OnSeekBarChangeListener() {
         @Override
@@ -532,6 +518,8 @@ public class AudioPlayerFragment extends Fragment {
             mFromTouch = false;
         }
     };
+
+	private VisualizerView mVisualizerView;
 
     /**
      * @return current time
@@ -572,6 +560,7 @@ public class AudioPlayerFragment extends Fragment {
 
     /**
      * Update what's playing
+     * CP 把新的信息传给歌词fragment
      */
     private void updateMusicInfo() {
         if (MusicUtils.mService == null) {
@@ -583,14 +572,20 @@ public class AudioPlayerFragment extends Fragment {
         String albumId = String.valueOf(MusicUtils.getCurrentAlbumId());
         mDuration = MusicUtils.getDuration();
         mTotalTime.setText(MusicUtils.makeTimeString(getActivity(), mDuration / 1000));
-
-        ImageInfo mInfo = new ImageInfo();
-        mInfo.type = TYPE_ALBUM;
-        mInfo.size = SIZE_NORMAL;
-        mInfo.source = SRC_FIRST_AVAILABLE;
-        mInfo.data = new String[]{ albumId , artistName, albumName };
+//
+//        ImageInfo mInfo = new ImageInfo();
+//        mInfo.type = TYPE_ALBUM;
+//        mInfo.size = SIZE_NORMAL;
+//        mInfo.source = SRC_FIRST_AVAILABLE;
+//        mInfo.data = new String[]{ albumId , artistName, albumName };
 
         AlbumArtFragment cur =(AlbumArtFragment) mPagerAdapter.getItem(mAlbumArtPager.getCurrentItem());
+//        Log.e(TAG, "cur.albumArt:"+cur.albumArt+"  mInfo:"+mInfo);
+//        cur.setImageInfo(mInfo);//CP 让子fragment去设置封面图片
+        
+        cur.loadImage();
+        
+//        if(cur.albumArt!=null)
 //        ImageProvider.getInstance( getActivity() ).loadImage( cur.albumArt, mInfo );
     }
 

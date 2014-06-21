@@ -611,8 +611,13 @@ public class ApolloService extends Service implements GetBitmapTask.OnBitmapRead
         // Log.i("@@@@ service", "saved state in " + (System.currentTimeMillis()
         // - start) + " ms");
     }
-
+    //CP
+    public void cpreloadQueue(){
+    	reloadQueue();
+    }
     private void reloadQueue() {
+
+    	Log.e("成功执行", "AIDL");
         String q = null;
 
         int id = mCardId;
@@ -1143,7 +1148,7 @@ public class ApolloService extends Service implements GetBitmapTask.OnBitmapRead
             }
             stop(false);
             mCursor = getCursorForId(mPlayList[mPlayPos]);
-            if (mCursor == null ) {
+            if (mCursor == null || mCursor.getCount()==0) {
                 return;
             }
             while(!open(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI + "/" + mCursor.getLong(IDCOLIDX))) {
@@ -1202,7 +1207,7 @@ public class ApolloService extends Service implements GetBitmapTask.OnBitmapRead
             }
 
             // if mCursor is null, try to associate path with a database cursor
-            if (mCursor == null) {
+            if (mCursor == null|| mCursor.getCount()==0) {
 
                 ContentResolver resolver = getContentResolver();
                 Uri uri;
@@ -1914,7 +1919,7 @@ public class ApolloService extends Service implements GetBitmapTask.OnBitmapRead
     		mAlbumBitmapTask = null;
     	}
     	
-    	if (mCursor == null) {
+    	if (mCursor == null|| mCursor.getCount()==0) {
     		return;
     	}
 
@@ -2074,7 +2079,7 @@ public class ApolloService extends Service implements GetBitmapTask.OnBitmapRead
 
     public String getArtistName() {
         synchronized (this) {
-            if (mCursor == null) {
+            if (mCursor == null || mCursor.getCount()==0) {
                 return getString(R.string.unknown);
             }
             return mCursor.getString(mCursor.getColumnIndexOrThrow(AudioColumns.ARTIST));
@@ -2083,7 +2088,7 @@ public class ApolloService extends Service implements GetBitmapTask.OnBitmapRead
 
     public long getArtistId() {
         synchronized (this) {
-            if (mCursor == null) {
+            if (mCursor == null|| mCursor.getCount()==0) {
                 return -1;
             }
             return mCursor.getLong(mCursor.getColumnIndexOrThrow(AudioColumns.ARTIST_ID));
@@ -2092,7 +2097,7 @@ public class ApolloService extends Service implements GetBitmapTask.OnBitmapRead
 
     public String getAlbumName() {
         synchronized (this) {
-            if (mCursor == null) {
+            if (mCursor == null || mCursor.getCount()==0) {
                 return getString(R.string.unknown);
             }
             return mCursor.getString(mCursor.getColumnIndexOrThrow(AudioColumns.ALBUM));
@@ -2101,7 +2106,7 @@ public class ApolloService extends Service implements GetBitmapTask.OnBitmapRead
 
     public long getAlbumId() {
         synchronized (this) {
-            if (mCursor == null) {
+            if (mCursor == null|| mCursor.getCount()==0) {
                 return -1;
             }
             return mCursor.getLong(mCursor.getColumnIndexOrThrow(AudioColumns.ALBUM_ID));
@@ -2114,7 +2119,7 @@ public class ApolloService extends Service implements GetBitmapTask.OnBitmapRead
 
     public String getTrackName() {
         synchronized (this) {
-            if (mCursor == null) {
+            if (mCursor == null|| mCursor.getCount()==0) {
                 return getString(R.string.unknown);
             }
             return mCursor.getString(mCursor.getColumnIndexOrThrow(MediaColumns.TITLE));
@@ -2123,7 +2128,7 @@ public class ApolloService extends Service implements GetBitmapTask.OnBitmapRead
 
     private boolean isPodcast() {
         synchronized (this) {
-            if (mCursor == null) {
+            if (mCursor == null|| mCursor.getCount()==0) {
                 return false;
             }
             return (mCursor.getInt(PODCASTCOLIDX) > 0);
@@ -2132,7 +2137,7 @@ public class ApolloService extends Service implements GetBitmapTask.OnBitmapRead
 
     private long getBookmark() {
         synchronized (this) {
-            if (mCursor == null) {
+            if (mCursor == null|| mCursor.getCount()==0) {
                 return 0;
             }
             return mCursor.getLong(BOOKMARKCOLIDX);
@@ -2430,7 +2435,10 @@ public class ApolloService extends Service implements GetBitmapTask.OnBitmapRead
         ServiceStub(ApolloService service) {
             mService = new WeakReference<ApolloService>(service);
         }
-
+        //CP
+        public void cpreloadQueue(){
+        	mService.get().cpreloadQueue();
+        }
         @Override
         public void openFile(String path) {
             mService.get().open(path);

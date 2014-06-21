@@ -12,7 +12,7 @@ import static com.cp.monsterMod.Constants.TYPE_ALBUM;
 public class AlbumsFragment extends GridViewFragment {
 
     public void setupFragmentData(){
-    	mAdapter = new AlbumAdapter(getActivity(), R.layout.gridview_items, null,
+    	mAdapter = new AlbumAdapter(getActivity(), R.layout.gridview_items, null, 
                 					new String[] {}, new int[] {}, 0); 
     	mProjection = new String []{
                 BaseColumns._ID, AlbumColumns.ALBUM, AlbumColumns.ARTIST, AlbumColumns.ALBUM_ART

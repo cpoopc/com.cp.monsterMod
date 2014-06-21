@@ -213,7 +213,7 @@ public abstract class CpListViewFragment extends RefreshableFragment implements 
 	        menu.add(mFragmentGroupId, USE_AS_RINGTONE, 0, getResources().getString(R.string.use_as_ringtone));
 	        menu.add(mFragmentGroupId, SEARCH, 0, getResources().getString(R.string.search));
 	        AdapterContextMenuInfo mi = (AdapterContextMenuInfo)menuInfo;
-	        mSelectedPosition = mi.position;
+	        mSelectedPosition = mi.position - 1;
 	        mCursor.moveToPosition(mSelectedPosition);
 	        mCurrentId = mCursor.getString(mCursor.getColumnIndexOrThrow(BaseColumns._ID));
 	        try {
@@ -255,7 +255,8 @@ public abstract class CpListViewFragment extends RefreshableFragment implements 
 
     @Override
     public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-        MusicUtils.playAll(getActivity(), mCursor, position);
+    	if(position==0)return;
+        MusicUtils.playAll(getActivity(), mCursor, position-1);
     }
 
     /**

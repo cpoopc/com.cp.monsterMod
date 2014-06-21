@@ -198,6 +198,7 @@ public class BottomActionBarFragment extends Fragment {
         mQueue.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+            	//CP 切换,刚开始显示AlbumArtFragment,没有显示NowPlayingFragment
             	if(albumArt.getVisibility()==View.VISIBLE){
             		listQueue.removeAllViews();
             		getFragmentManager().beginTransaction().add(R.id.audio_player_queue_wrapper, new NowPlayingFragment(), "NowPlayingTag").commit();

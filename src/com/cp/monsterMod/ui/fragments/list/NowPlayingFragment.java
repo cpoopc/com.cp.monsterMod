@@ -3,6 +3,8 @@ package com.cp.monsterMod.ui.fragments.list;
 
 import android.support.v4.content.Loader;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -55,8 +57,12 @@ public class NowPlayingFragment extends DragSortListViewFragment{
         //注册广播,监听拖拽事件
         registBrocast();
 	}
-
-
+	//TODO 切换歌曲时,Lyric重新载入歌词//有广播,不需要这样
+	@Override
+	public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+		super.onItemClick(parent, v, position, id);
+	}
+	
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         if (data == null) {

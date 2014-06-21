@@ -196,6 +196,7 @@ public abstract class ListViewFragment extends RefreshableFragment implements Lo
 
     /**
      * Update the list as needed
+     * CP 切换歌曲时,会收到广播
      */
     private final BroadcastReceiver mMediaStatusReceiver = new BroadcastReceiver() {
         @Override

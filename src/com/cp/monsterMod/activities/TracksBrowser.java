@@ -277,11 +277,12 @@ public class TracksBrowser extends FragmentActivity implements ServiceConnection
 
     @Override
     public void onServiceConnected(ComponentName name, IBinder obj) {
-        MusicUtils.mService = IApolloService.Stub.asInterface(obj);
+        MusicUtils.mService = IApolloService.Stub.asInterface(obj); 
     }
 
     @Override
     public void onServiceDisconnected(ComponentName name) {
+//    	Log.e("onServiceDisconnected", "onServiceDisconnected");
         MusicUtils.mService = null;
     }
 
@@ -319,8 +320,11 @@ public class TracksBrowser extends FragmentActivity implements ServiceConnection
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                super.onBackPressed();
-                return true;
+//                super.onBackPressed();
+//            	onBackPressed();
+            	finish();
+            	break;
+//                return true;
             default:
                 break;
         }
@@ -350,7 +354,8 @@ public class TracksBrowser extends FragmentActivity implements ServiceConnection
      * Set the ActionBar title
      */
     private void initActionBar() {
-    	getActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#330000ff")));
+    	//CP
+    	getActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#333300ff")));
         ApolloUtils.showUpTitleOnly(getActionBar());
 //        getActionBar().setDisplayUseLogoEnabled(true);
     }

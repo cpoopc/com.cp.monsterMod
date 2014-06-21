@@ -7,13 +7,16 @@ import android.os.Bundle;
 import android.provider.BaseColumns;
 import android.provider.MediaStore.Audio;
 import android.provider.MediaStore.Audio.AudioColumns;
+import android.provider.MediaStore.Audio.PlaylistsColumns;
 import android.provider.MediaStore.MediaColumns;
 import com.cp.monsterMod.R;
 import com.cp.monsterMod.helpers.AddIdCursorLoader;
 import com.cp.monsterMod.helpers.utils.MusicUtils;
+import com.cp.monsterMod.ui.adapters.list.PlaylistAdapter;
 import com.cp.monsterMod.ui.adapters.list.RecentlyAddedAdapter;
 import com.cp.monsterMod.ui.fragments.base.ListViewFragment;
 import static com.cp.monsterMod.Constants.NUMWEEKS;
+import static com.cp.monsterMod.Constants.TYPE_PLAYLIST;
 /**
  * 
  * @author Administrator

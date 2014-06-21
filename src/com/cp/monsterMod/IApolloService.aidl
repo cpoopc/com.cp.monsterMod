@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 
 interface IApolloService
 {
+	void cpreloadQueue();
     void openFile(String path);
     void open(in long [] list, int position);
     long getIdFromPath(String path);

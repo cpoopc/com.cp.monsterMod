@@ -42,6 +42,7 @@ public class ArtistAlbumsFragment extends CpListViewFragment{
 
     @Override
     public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+    	
     	ApolloUtils.startTracksBrowser(mType, id, mCursor, getActivity());
     }
 

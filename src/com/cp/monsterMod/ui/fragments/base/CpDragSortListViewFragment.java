@@ -281,7 +281,7 @@ public abstract class CpDragSortListViewFragment extends RefreshableFragment imp
 //    	ToastUtils.showToast(getActivity(), ""+position);
     	if(position==0){
     		//headview
-    		
+    		return;
     	}
         MusicUtils.playAll(getActivity(), mCursor, position-1);
     }
